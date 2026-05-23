@@ -1,0 +1,58 @@
+{
+  "manifest_version": 3,
+  "name": "Paper Renamer",
+  "version": "3.0.0",
+  "description": "Renames academic paper PDFs in Paperpile-compatible format and sends metadata on download",
+  "permissions": ["downloads"],
+  "host_permissions": [
+    "https://pubmed.ncbi.nlm.nih.gov/*",
+    "https://doi.org/*",
+    "https://dx.doi.org/*",
+    "https://www.sciencedirect.com/*",
+    "https://link.springer.com/*",
+    "https://www.nature.com/*",
+    "https://onlinelibrary.wiley.com/*",
+    "https://journals.plos.org/*",
+    "https://academic.oup.com/*",
+    "https://www.cell.com/*",
+    "https://www.science.org/*",
+    "https://arxiv.org/*",
+    "https://www.biorxiv.org/*",
+    "https://www.medrxiv.org/*",
+    "https://ieeexplore.ieee.org/*",
+    "https://scholar.google.com/*",
+    "https://www.jstage.jst.go.jp/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://pubmed.ncbi.nlm.nih.gov/*",
+        "https://doi.org/*",
+        "https://dx.doi.org/*",
+        "https://www.sciencedirect.com/*",
+        "https://link.springer.com/*",
+        "https://www.nature.com/*",
+        "https://onlinelibrary.wiley.com/*",
+        "https://journals.plos.org/*",
+        "https://academic.oup.com/*",
+        "https://www.cell.com/*",
+        "https://www.science.org/*",
+        "https://arxiv.org/*",
+        "https://www.biorxiv.org/*",
+        "https://www.medrxiv.org/*",
+        "https://ieeexplore.ieee.org/*",
+        "https://scholar.google.com/*",
+        "https://www.jstage.jst.go.jp/*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Paper Renamer"
+  }
+}

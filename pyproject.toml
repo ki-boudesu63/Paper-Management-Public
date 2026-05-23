@@ -1,0 +1,40 @@
+[project]
+name = "paper-management"
+version = "0.1.0"
+description = "Academic paper management app with Obsidian integration"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn>=0.30",
+    "jinja2>=3.1",
+    "pyyaml>=6.0",
+    "python-frontmatter>=1.1",
+    "httpx>=0.27",
+    "pypdf>=4.0",
+    "watchdog>=4.0",
+    "python-multipart>=0.0.28",
+    "docling>=2.93.0",
+]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 88
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "B", "UP"]
+ignore = ["E501"]
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.3",
+    "pytest-asyncio>=1.3.0",
+    "respx>=0.22.0",
+    "ruff>=0.15.13",
+]

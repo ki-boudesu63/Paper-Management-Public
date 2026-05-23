@@ -1,0 +1,547 @@
+/* Component styles for "Reading Room" UI.
+ *
+ * Uses design tokens from tokens.css.
+ * Tailwind utilities handle spacing/flex; this file provides
+ * component-level styles that tokens alone cannot express.
+ */
+
+/* ============================================================
+ * Reset & base
+ * ============================================================ */
+
+html {
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  font-weight: var(--weight-body);
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================================
+ * Focus ring (accessibility)
+ * ============================================================ */
+
+*:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+/* ============================================================
+ * Typography classes
+ * ============================================================ */
+
+.heading-h1 {
+  font-family: var(--font-heading);
+  font-size: var(--text-h1);
+  font-weight: var(--weight-h1);
+  color: var(--color-text);
+}
+
+.heading-h2 {
+  font-family: var(--font-heading);
+  font-size: var(--text-h2);
+  font-weight: var(--weight-h2);
+  color: var(--color-text);
+}
+
+.heading-h3 {
+  font-family: var(--font-label);
+  font-size: var(--text-h3);
+  font-weight: var(--weight-h3);
+  color: var(--color-text);
+}
+
+.paper-title {
+  font-family: var(--font-heading);
+  font-size: var(--text-paper-title);
+  font-weight: var(--weight-paper-title);
+  color: var(--color-text);
+  line-height: 1.5;
+}
+
+.text-meta {
+  font-family: var(--font-mono);
+  font-size: var(--text-meta);
+  font-weight: var(--weight-meta);
+  color: var(--color-text-secondary);
+}
+
+.text-label {
+  font-family: var(--font-label);
+  font-size: var(--text-label);
+  font-weight: var(--weight-label);
+  color: var(--color-text-secondary);
+  letter-spacing: 0.05em;
+}
+
+/* ============================================================
+ * Layout — 3 column
+ * ============================================================ */
+
+.layout-container {
+  display: flex;
+  max-width: var(--container-max);
+  min-width: var(--container-min);
+  height: 100vh;
+  margin: 0 auto;
+}
+
+/* ============================================================
+ * Initial Rail (left column)
+ * ============================================================ */
+
+.initial-rail {
+  width: var(--rail-width);
+  min-width: var(--rail-width);
+  background-color: var(--color-surface);
+  border-right: 1px solid var(--color-hairline);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-2) 0;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.initial-rail__item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 32px;
+  font-family: var(--font-mono);
+  font-size: var(--text-meta);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color var(--transition-fast),
+              color var(--transition-fast);
+  text-decoration: none;
+  position: relative;
+}
+
+.initial-rail__item:hover {
+  background-color: var(--color-hairline);
+  color: var(--color-text);
+}
+
+.initial-rail__item--active {
+  background-color: var(--color-primary);
+  color: #fff;
+}
+
+.initial-rail__item--active:hover {
+  background-color: var(--color-secondary);
+  color: #fff;
+}
+
+.initial-rail__badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  font-size: 0.6rem;
+  color: var(--color-text-secondary);
+  pointer-events: none;
+}
+
+/* ============================================================
+ * Main content (center column)
+ * ============================================================ */
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-width: 0;
+}
+
+/* ============================================================
+ * Top toolbar
+ * ============================================================ */
+
+.top-toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-hairline);
+  background-color: var(--color-surface);
+  flex-shrink: 0;
+}
+
+.search-input {
+  flex: 1;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-hairline);
+  border-radius: 4px;
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  transition: border-color var(--transition-fast);
+}
+
+.search-input:focus {
+  border-color: var(--color-primary);
+}
+
+.search-input::placeholder {
+  color: var(--color-text-secondary);
+}
+
+/* ============================================================
+ * Paper list (hairline-ruled)
+ * ============================================================ */
+
+.paper-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0;
+}
+
+.paper-list__item {
+  display: block;
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-hairline);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+  text-decoration: none;
+  color: inherit;
+}
+
+.paper-list__item:hover {
+  background-color: var(--color-surface);
+}
+
+.paper-list__item--selected {
+  background-color: var(--color-surface);
+  border-left: 3px solid var(--color-primary);
+}
+
+/* ============================================================
+ * Inspector (right column)
+ * ============================================================ */
+
+.inspector {
+  width: var(--inspector-width);
+  min-width: var(--inspector-width);
+  background-color: var(--color-surface);
+  border-left: 1px solid var(--color-hairline);
+  overflow-y: auto;
+  padding: var(--space-4);
+  flex-shrink: 0;
+}
+
+.inspector__section {
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--color-hairline);
+}
+
+.inspector__section:last-child {
+  border-bottom: none;
+}
+
+/* ============================================================
+ * Buttons
+ * ============================================================ */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  border: none;
+  border-radius: 4px;
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color var(--transition-fast),
+              color var(--transition-fast);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.btn--primary {
+  background-color: var(--color-primary);
+  color: #fff;
+}
+
+.btn--primary:hover {
+  background-color: var(--color-secondary);
+}
+
+.btn--secondary {
+  background-color: transparent;
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+}
+
+.btn--secondary:hover {
+  background-color: var(--color-primary);
+  color: #fff;
+}
+
+.btn--ghost {
+  background-color: transparent;
+  color: var(--color-text-secondary);
+}
+
+.btn--ghost:hover {
+  background-color: var(--color-hairline);
+  color: var(--color-text);
+}
+
+/* Destructive action button (e.g. delete) */
+.btn--danger {
+  background-color: var(--color-error);
+  color: #fff;
+}
+
+.btn--danger:hover {
+  filter: brightness(0.92);
+}
+
+/* ============================================================
+ * Empty state
+ * ============================================================ */
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-12) var(--space-4);
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+
+.empty-state__message {
+  font-family: var(--font-heading);
+  font-size: var(--text-h2);
+  font-weight: var(--weight-h2);
+  margin-bottom: var(--space-2);
+}
+
+/* ============================================================
+ * Meta chip (DOI, year, PaperID, filename)
+ * ============================================================ */
+
+.meta-chip {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: var(--text-meta);
+  color: var(--color-text-secondary);
+  background-color: var(--color-bg);
+  padding: 2px var(--space-2);
+  border-radius: 3px;
+}
+
+/* ============================================================
+ * Toast / Notification
+ * Success = primary green, Unsorted/warning = ochre accent
+ * ============================================================ */
+
+.toast {
+  padding: var(--space-3) var(--space-4);
+  border-radius: 4px;
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  border: 1px solid var(--color-hairline);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+}
+
+.toast--success {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.toast--warning {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.toast--error {
+  border-color: var(--color-error);
+  color: var(--color-error);
+}
+
+/* Floating toast container (for htmx-triggered toasts) */
+.toast-container {
+  position: fixed;
+  top: var(--space-4);
+  right: var(--space-4);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  pointer-events: none;
+}
+
+.toast-container .toast {
+  pointer-events: auto;
+  animation: toast-fade-in var(--transition-normal) ease;
+}
+
+.toast--dismissing {
+  animation: toast-fade-out var(--transition-normal) ease forwards;
+}
+
+@keyframes toast-fade-in {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes toast-fade-out {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(-8px); }
+}
+
+/* ============================================================
+ * Import log table
+ * ============================================================ */
+
+.import-log-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.import-log-table th {
+  text-align: left;
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 2px solid var(--color-hairline);
+}
+
+.import-log-table td {
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--color-hairline);
+  vertical-align: top;
+}
+
+.import-log-table__row:hover {
+  background-color: var(--color-surface);
+}
+
+/* Status badges */
+.status-badge {
+  display: inline-block;
+  padding: 2px var(--space-2);
+  border-radius: 3px;
+  font-family: var(--font-label);
+  font-size: var(--text-label);
+  font-weight: var(--weight-label);
+}
+
+.status-badge--success {
+  background-color: var(--color-primary);
+  color: #fff;
+}
+
+.status-badge--unsorted {
+  background-color: var(--color-accent);
+  color: #fff;
+}
+
+.status-badge--duplicate {
+  background-color: var(--color-hairline);
+  color: var(--color-text-secondary);
+}
+
+.status-badge--error {
+  background-color: var(--color-error);
+  color: #fff;
+}
+
+/* ============================================================
+ * Collection card
+ * ============================================================ */
+
+.collection-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-hairline);
+}
+
+.collection-card:hover {
+  background-color: var(--color-surface);
+}
+
+.collection-card__select {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-1);
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
+  padding: 0;
+}
+
+/* ============================================================
+ * Setting field
+ * ============================================================ */
+
+.setting-field {
+  margin-bottom: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.setting-field label {
+  margin-bottom: var(--space-1);
+}
+
+/* ============================================================
+ * Responsive — md breakpoint (1024–1279px)
+ * Inspector folds away; shown as overlay on paper click
+ * ============================================================ */
+
+@media (max-width: 1279px) {
+  .inspector {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    z-index: 100;
+    box-shadow: -4px 0 16px rgba(0, 0, 0, 0.08);
+    transition: transform var(--transition-normal);
+  }
+
+  .inspector--visible {
+    display: block;
+  }
+
+  /* Overlay backdrop */
+  .inspector-backdrop {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.2);
+    z-index: 99;
+    display: none;
+  }
+
+  .inspector-backdrop--visible {
+    display: block;
+  }
+
+  .layout-container {
+    min-width: 0;
+  }
+}

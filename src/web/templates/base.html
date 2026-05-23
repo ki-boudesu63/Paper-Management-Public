@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="{{ current_language() }}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Paper Management{% endblock %}</title>
+
+  <!-- Google Fonts: Shippori Mincho / BIZ UDPGothic / IBM Plex Sans / IBM Plex Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600&family=BIZ+UDPGothic:wght@400;700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN (utility-only usage) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Design tokens + component styles -->
+  <link rel="stylesheet" href="{{ url_for('static', path='css/tokens.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', path='css/components.css') }}">
+
+  <!-- htmx -->
+  <script src="https://unpkg.com/htmx.org@2.0.4" integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div class="layout-container">
+    {% block layout %}{% endblock %}
+  </div>
+
+  <!-- Toast container (populated by JS) -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <!-- App JS -->
+  <script src="{{ url_for('static', path='js/app.js') }}"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,52 @@
+{% if collection %}
+<div style="padding: var(--space-4); border-bottom: 1px solid var(--color-hairline);">
+  <h2 class="heading-h3" style="margin-bottom: var(--space-1);">{{ collection.name }}</h2>
+  <span class="text-meta">{{ t('collections.paper_count', count=papers | length) }}</span>
+</div>
+
+{% if papers %}
+<div class="paper-list" style="overflow-y: visible;">
+  {% for paper in papers %}
+  <div class="paper-list__item" data-paper-id="{{ paper.id.value }}">
+    <div style="display: flex; gap: var(--space-3); align-items: flex-start; justify-content: space-between;">
+      <div
+        style="min-width: 0; flex: 1; cursor: pointer;"
+        hx-get="/inspector/{{ paper.id.value | urlencode }}"
+        hx-target="#inspector-panel"
+        hx-swap="innerHTML"
+      >
+        <div class="paper-title">{{ paper.metadata.title }}</div>
+        <div style="display: flex; align-items: center; gap: var(--space-3); margin-top: var(--space-1); flex-wrap: wrap;">
+          <span class="text-label">{{ paper.metadata.first_author.display_name }}{% if paper.metadata.authors | length > 1 %} {{ t('common.et_al') }}{% endif %}</span>
+          <span class="meta-chip">{{ paper.metadata.year.value }}</span>
+          {% if paper.metadata.doi %}
+          <span class="meta-chip">{{ paper.metadata.doi.value }}</span>
+          {% endif %}
+        </div>
+      </div>
+      <button
+        type="button"
+        class="btn btn--ghost"
+        style="color: var(--color-error);"
+        hx-post="/collections/{{ collection.id.value }}/papers/{{ paper.id.value | urlencode }}/remove"
+        hx-target="#collection-detail"
+        hx-swap="innerHTML"
+      >
+        {{ t('collections.remove_from_collection') }}
+      </button>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+  <div class="empty-state__message">{{ t('collection_papers.empty_message') }}</div>
+  <p class="text-label">{{ t('collection_papers.empty_help') }}</p>
+</div>
+{% endif %}
+{% else %}
+<div class="empty-state">
+  <div class="empty-state__message">{{ t('collection_papers.not_found_message') }}</div>
+  <p class="text-label">{{ t('collection_papers.not_found_help') }}</p>
+</div>
+{% endif %}

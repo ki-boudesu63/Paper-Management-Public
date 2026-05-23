@@ -1,0 +1,25 @@
+<!-- Paper list: hairline-ruled rows with editorial Mincho titles + monospace metadata -->
+{% if papers %}
+{% for paper in papers %}
+<a class="paper-list__item"
+   hx-get="/inspector/{{ paper.id.value | urlencode }}"
+   hx-target="#inspector-panel"
+   hx-swap="innerHTML"
+   href="#"
+   data-paper-id="{{ paper.id.value }}">
+  <div class="paper-title">{{ paper.metadata.title }}</div>
+  <div style="display: flex; align-items: center; gap: var(--space-3); margin-top: var(--space-1);">
+    <span class="text-label">{{ paper.metadata.first_author.display_name }}{% if paper.metadata.authors | length > 1 %} {{ t('common.et_al') }}{% endif %}</span>
+    <span class="meta-chip">{{ paper.metadata.year.value }}</span>
+    {% if paper.metadata.doi %}
+    <span class="meta-chip">{{ paper.metadata.doi.value }}</span>
+    {% endif %}
+  </div>
+</a>
+{% endfor %}
+{% else %}
+<div class="empty-state">
+  <div class="empty-state__message">{{ t('paper_list.empty_message') }}</div>
+  <p class="text-label">{{ t('paper_list.empty_help') }}</p>
+</div>
+{% endif %}

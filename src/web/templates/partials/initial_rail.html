@@ -1,0 +1,19 @@
+<!-- Initial Rail: A-Z + # vertical navigation.
+     Each letter links to filter papers by initial letter via htmx. -->
+<nav class="initial-rail" aria-label="{{ t('library.initial_rail_aria') }}">
+  {% for letter in initial_letters %}
+  <a class="initial-rail__item {% if active_letter == letter %}initial-rail__item--active{% endif %}"
+     href="#"
+     hx-get="/papers?letter={{ letter }}"
+     hx-target="#paper-list"
+     hx-swap="innerHTML"
+     hx-push-url="/?letter={{ letter }}"
+     title="{{ letter }}"
+     aria-label="{{ letter }}">
+    {{ letter }}
+    {% if letter_counts.get(letter, 0) > 0 %}
+    <span class="initial-rail__badge">{{ letter_counts[letter] }}</span>
+    {% endif %}
+  </a>
+  {% endfor %}
+</nav>

@@ -1,0 +1,23 @@
+# Local configuration (user-specific paths; never commit)
+config.yaml
+
+# Python virtual environment and bytecode
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# Test cache
+.pytest_cache/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor / IDE
+.idea/
+.vscode/
+
+# Backup files
+*.bak
+*.before-codex

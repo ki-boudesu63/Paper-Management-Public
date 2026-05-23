@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}{{ t('collections.title') }} - Paper Management{% endblock %}
+
+{% block layout %}
+<div class="main-content" style="padding: var(--space-6); overflow-y: auto;">
+  <div style="max-width: 1120px; margin: 0 auto;">
+    <h1 class="heading-h1" style="margin-bottom: var(--space-4);">{{ t('collections.heading') }}</h1>
+
+    <div style="margin-bottom: var(--space-6);">
+      <a href="/" class="btn btn--ghost">&larr; {{ t('nav.back_to_library') }}</a>
+      <a href="/import" class="btn btn--ghost">{{ t('nav.import_status') }}</a>
+      <a href="/settings" class="btn btn--ghost">{{ t('nav.settings') }}</a>
+    </div>
+
+    <div style="margin-bottom: var(--space-6); padding: var(--space-4); background-color: var(--color-surface); border: 1px solid var(--color-hairline); border-radius: 4px;">
+      <h2 class="heading-h3" style="margin-bottom: var(--space-3);">{{ t('collections.create_heading') }}</h2>
+      <form action="/collections/create" method="post" style="display: flex; gap: var(--space-3); align-items: center;">
+        <input
+          class="search-input"
+          type="text"
+          name="name"
+          placeholder="{{ t('collections.name_placeholder') }}"
+          required
+          style="flex: 1;"
+          aria-label="{{ t('collections.name_label') }}"
+        >
+        <button type="submit" class="btn btn--primary">{{ t('collections.create_button') }}</button>
+      </form>
+    </div>
+
+    {% if collections %}
+    <div style="display: grid; grid-template-columns: minmax(280px, 360px) minmax(0, 1fr); gap: var(--space-6); align-items: start;">
+      <div>
+        <h2 class="heading-h3" style="margin-bottom: var(--space-3);">{{ t('collections.list_heading') }}</h2>
+        {% for collection in collections %}
+        <div class="collection-card">
+          <button
+            type="button"
+            class="collection-card__select"
+            hx-get="/collections/{{ collection.id.value }}/papers"
+            hx-target="#collection-detail"
+            hx-swap="innerHTML"
+          >
+            <span class="heading-h3">{{ collection.name }}</span>
+            <span class="text-meta">{{ t('collections.paper_count', count=collection.paper_count) }}</span>
+          </button>
+          <form action="/collections/{{ collection.id.value }}/delete" method="post"
+                onsubmit="return confirm('{{ t('collections.confirm_delete', name=collection.name) }}');">
+            <button type="submit" class="btn btn--ghost" style="color: var(--color-error);">{{ t('common.delete') }}</button>
+          </form>
+        </div>
+        {% endfor %}
+      </div>
+
+      <div id="collection-detail" style="border: 1px solid var(--color-hairline); border-radius: 4px; min-height: 280px; background: var(--color-bg);">
+        <div class="empty-state">
+          <div class="empty-state__message">{{ t('collections.select_message') }}</div>
+          <p class="text-label">{{ t('collections.select_help') }}</p>
+        </div>
+      </div>
+    </div>
+    {% else %}
+    <div class="empty-state">
+      <div class="empty-state__message">{{ t('collections.empty_message') }}</div>
+      <p class="text-label">{{ t('collections.empty_help') }}</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<div class="inspector" id="inspector-panel">
+  {% include "partials/inspector.html" %}
+</div>
+{% endblock %}

@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block title %}{{ t('import.title') }} — Paper Management{% endblock %}
+
+{% block layout %}
+<div class="main-content" style="padding: var(--space-6); overflow-y: auto;">
+  <div style="max-width: 960px; margin: 0 auto;">
+    <h1 class="heading-h1" style="margin-bottom: var(--space-4);">{{ t('import.heading') }}</h1>
+
+    <!-- Navigation back to library -->
+    <div style="margin-bottom: var(--space-6);">
+      <a href="/" class="btn btn--ghost">&larr; {{ t('nav.back_to_library') }}</a>
+      <a href="/collections" class="btn btn--ghost">{{ t('nav.collections') }}</a>
+      <a href="/settings" class="btn btn--ghost">{{ t('nav.settings') }}</a>
+    </div>
+
+    <!-- Result flash message -->
+    {% if result_flash %}
+    <div class="flash-message flash-message--{{ result_flash }}" style="margin-bottom: var(--space-4); padding: var(--space-2) var(--space-3); border-radius: 4px; background: var(--color-surface-2);">
+      {% if result_flash == "success" %}
+        <span style="color: var(--color-primary);">{{ t('import.flash_success') }}</span>
+      {% elif result_flash == "duplicate" %}
+        <span style="color: var(--color-accent);">{{ t('import.flash_duplicate') }}</span>
+      {% elif result_flash == "unsorted" %}
+        <span style="color: var(--color-accent);">{{ t('import.flash_unsorted') }}</span>
+      {% elif result_flash == "error" %}
+        <span style="color: var(--color-error);">{{ t('import.flash_error') }}</span>
+      {% endif %}
+    </div>
+    {% endif %}
+
+    <!-- Manual import button + Status summary row -->
+    <div style="display: flex; gap: var(--space-4); margin-bottom: var(--space-6); align-items: center; flex-wrap: wrap;">
+      <!-- Manual PDF import button -->
+      <form id="pick-pdf-form" method="post" action="/import/pick-pdf" style="margin: 0;">
+        <button type="submit" class="btn btn--primary" id="pick-pdf-btn" onclick="showPickPdfSpinner()">
+          {{ t('import.pick_pdf_button') }}
+        </button>
+        <span id="pick-pdf-spinner" style="display: none; margin-left: var(--space-2);">
+          {{ t('import.processing') }}
+        </span>
+      </form>
+
+      <div class="meta-chip" style="padding: var(--space-2) var(--space-3);">
+        {{ t('import.total_count', count=total_count) }}
+      </div>
+      {% if status_counts.success > 0 %}
+      <div class="meta-chip" style="padding: var(--space-2) var(--space-3); color: var(--color-primary);">
+        {{ t('import.success_count', count=status_counts.success) }}
+      </div>
+      {% endif %}
+      {% if status_counts.unsorted > 0 %}
+      <div class="meta-chip" style="padding: var(--space-2) var(--space-3); color: var(--color-accent);">
+        {{ t('import.unsorted_count', count=status_counts.unsorted) }}
+      </div>
+      {% endif %}
+      {% if status_counts.duplicate > 0 %}
+      <div class="meta-chip" style="padding: var(--space-2) var(--space-3);">
+        {{ t('import.duplicate_count', count=status_counts.duplicate) }}
+      </div>
+      {% endif %}
+      {% if status_counts.error > 0 %}
+      <div class="meta-chip" style="padding: var(--space-2) var(--space-3); color: var(--color-error);">
+        {{ t('import.error_count', count=status_counts.error) }}
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- Import log table -->
+    {% if history %}
+    <table class="import-log-table">
+      <thead>
+        <tr>
+          <th class="text-label">{{ t('import.table_status') }}</th>
+          <th class="text-label">{{ t('import.table_file') }}</th>
+          <th class="text-label">{{ t('import.table_details') }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for result in history %}
+        <tr class="import-log-table__row">
+          <td>
+            {% if result.status == "success" %}
+            <span class="status-badge status-badge--success">{{ t('import.status_success') }}</span>
+            {% elif result.status == "unsorted" %}
+            <span class="status-badge status-badge--unsorted">{{ t('import.status_unsorted') }}</span>
+            {% elif result.status == "duplicate" %}
+            <span class="status-badge status-badge--duplicate">{{ t('import.status_duplicate') }}</span>
+            {% elif result.status == "error" %}
+            <span class="status-badge status-badge--error">{{ t('import.status_error') }}</span>
+            {% endif %}
+          </td>
+          <td class="text-meta">{{ result.pdf_path | truncate(60) }}</td>
+          <td>
+            {% if result.paper %}
+            <span style="font-size: var(--text-body);">{{ result.paper.metadata.title | truncate(50) }}</span>
+            {% elif result.message %}
+            <span class="text-meta">{{ result.message | truncate(60) }}</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state">
+      <div class="empty-state__message">{{ t('import.empty_message') }}</div>
+      <p class="text-label">{{ t('import.empty_help') }}</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+function showPickPdfSpinner() {
+  var btn = document.getElementById('pick-pdf-btn');
+  var spinner = document.getElementById('pick-pdf-spinner');
+  if (btn) {
+    btn.textContent = '{{ t('import.selecting') }}';
+    // Defer disabling: a submit button disabled during its own click
+    // event cancels the form submission. setTimeout(0) lets the POST
+    // fire first, then disables the button to prevent double-clicks.
+    setTimeout(function () { btn.disabled = true; }, 0);
+  }
+  if (spinner) {
+    spinner.style.display = 'inline';
+  }
+}
+</script>
+{% endblock %}

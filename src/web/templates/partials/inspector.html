@@ -1,0 +1,140 @@
+<!-- Inspector panel: paper detail view in the right column. -->
+{% if paper is defined and paper %}
+<div class="inspector__section">
+  <h3 class="heading-h3" style="margin-bottom: var(--space-2);">{{ t('inspector.heading') }}</h3>
+</div>
+
+<div class="inspector__section">
+  <div class="paper-title" style="margin-bottom: var(--space-3);">{{ paper.metadata.title }}</div>
+</div>
+
+<div class="inspector__section">
+  <div class="text-label" style="margin-bottom: var(--space-1);">{{ t('inspector.authors') }}</div>
+  {% for author in paper.metadata.authors %}
+  <div style="font-size: var(--text-body);">{{ author.display_name }}</div>
+  {% endfor %}
+</div>
+
+<div class="inspector__section">
+  <div class="text-label" style="margin-bottom: var(--space-1);">{{ t('inspector.publication_year') }}</div>
+  <span class="meta-chip">{{ paper.metadata.year.value }}</span>
+</div>
+
+{% if paper.metadata.doi %}
+<div class="inspector__section">
+  <div class="text-label" style="margin-bottom: var(--space-1);">{{ t('inspector.doi') }}</div>
+  <span class="meta-chip">{{ paper.metadata.doi.value }}</span>
+</div>
+{% endif %}
+
+<div class="inspector__section">
+  <div class="text-label" style="margin-bottom: var(--space-1);">{{ t('inspector.paper_id') }}</div>
+  <span class="meta-chip">{{ paper.id.value }}</span>
+</div>
+
+{% if paper.metadata.abstract %}
+<div class="inspector__section">
+  <div class="text-label" style="margin-bottom: var(--space-1);">{{ t('inspector.abstract') }}</div>
+  <p style="font-size: var(--text-body); line-height: 1.7; margin: 0; white-space: pre-wrap;">{{ paper.metadata.abstract }}</p>
+</div>
+{% endif %}
+
+{% if paper.metadata.memo %}
+<div class="inspector__section">
+  <div class="text-label" style="margin-bottom: var(--space-1);">{{ t('inspector.memo') }}</div>
+  <p style="font-size: var(--text-body); line-height: 1.7; margin: 0; white-space: pre-wrap;">{{ paper.metadata.memo }}</p>
+</div>
+{% endif %}
+
+{% if paper.tags %}
+<div class="inspector__section">
+  <div class="text-label" style="margin-bottom: var(--space-1);">{{ t('inspector.tags') }}</div>
+  <div style="display: flex; flex-wrap: wrap; gap: var(--space-1);">
+    {% for tag in paper.tags %}
+    <span class="meta-chip">{{ tag }}</span>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+
+<div class="inspector__section">
+  <div class="text-label" style="margin-bottom: var(--space-2);">{{ t('nav.collections') }}</div>
+  {% if collection_names %}
+  <div style="display: flex; flex-wrap: wrap; gap: var(--space-1); margin-bottom: var(--space-3);">
+    {% for name in collection_names %}
+    <span class="meta-chip">{{ name }}</span>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% if collections %}
+  <form
+    hx-post="/collections/papers/{{ paper.id.value | urlencode }}/add"
+    hx-swap="none"
+    style="display: flex; gap: var(--space-2); align-items: center;"
+  >
+    <select
+      class="search-input"
+      name="collection_id"
+      aria-label="{{ t('inspector.add_collection_aria') }}"
+      style="min-width: 0;"
+    >
+      {% for collection in collections %}
+      <option value="{{ collection.id.value }}">{{ collection.name }}</option>
+      {% endfor %}
+    </select>
+    <button type="submit" class="btn btn--secondary">{{ t('common.add') }}</button>
+  </form>
+  {% else %}
+  <p class="text-label" style="margin: 0;">{{ t('inspector.create_collection_first') }}</p>
+  {% endif %}
+</div>
+
+<div class="inspector__section" style="border-bottom: none;">
+  <div style="display: flex; flex-direction: column; gap: var(--space-2);">
+    {% if obsidian_note_path %}
+    <button class="btn btn--primary obsidian-open-btn"
+            type="button"
+            data-file="{{ obsidian_note_path }}"
+            title="{{ t('inspector.open_obsidian_note_title') }}">
+      {{ t('inspector.open_obsidian') }}
+    </button>
+    {% endif %}
+    {% if obsidian_pdf_path %}
+    <button class="btn btn--secondary obsidian-open-btn"
+            type="button"
+            data-file="{{ obsidian_pdf_path }}"
+            title="{{ t('inspector.open_pdf_title') }}">
+      {{ t('inspector.open_pdf') }}
+    </button>
+    {% elif paper is defined and paper and not paper.has_pdf %}
+    <button class="btn btn--secondary"
+            type="button"
+            hx-post="/papers/{{ paper.id.value | urlencode }}/attach-pdf"
+            hx-target="#inspector-panel"
+            hx-swap="innerHTML"
+            title="{{ t('inspector.attach_pdf_title') }}">
+      {{ t('inspector.attach_pdf') }}
+    </button>
+    {% endif %}
+  </div>
+</div>
+
+<div class="inspector__section" style="border-bottom: none; margin-top: var(--space-4);">
+  <button class="btn btn--danger"
+          type="button"
+          hx-post="/papers/{{ paper.id.value | urlencode }}/delete"
+          hx-target="#inspector-panel"
+          hx-swap="innerHTML"
+          hx-confirm="{{ t('inspector.delete_confirm') }}"
+          title="{{ t('inspector.delete_title') }}">
+    {{ t('common.delete') }}
+  </button>
+</div>
+
+{% else %}
+<div class="empty-state" style="height: 100%;">
+  <div class="empty-state__message">{{ t('inspector.select_paper_message') }}</div>
+  <p class="text-label">{{ t('inspector.select_paper_help') }}</p>
+</div>
+{% endif %}

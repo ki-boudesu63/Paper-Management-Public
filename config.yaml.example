@@ -1,0 +1,22 @@
+# Paper Management 設定ファイルのテンプレート
+#
+# このファイルを `config.yaml` にコピーし、各パスを環境に合わせて設定してください。
+# 設定アプリの「設定」画面からでも編集できます（推奨）。
+# フォルダ構成は vault_template/paper_management を参照してください。
+
+language: "ja"  # UI表示言語: ja（日本語）/ en（English）/ zh（简体中文）
+
+paths:
+  library_root: ""   # 論文保存ルート（vault_template の paper_management/library）
+  vault_path: ""     # Obsidian Vault のルート
+  style_folder: ""   # スタイル定義フォルダ（paper_management/styles）
+  watch_folder: ""   # 監視フォルダ（paper_management/inbox）
+vault_name: ""       # 空欄時は vault_path のフォルダ名を使用
+server:
+  host: "127.0.0.1"
+  port: 12000
+import_settings:
+  unsorted_folder_name: "未整理"
+  watch_interval_sec: 2
+  contact_email: ""        # CrossRef polite pool 用の連絡先メール
+  extract_full_text: true  # PDF本文・図をMDに埋め込む（Docling使用、false で無効化）

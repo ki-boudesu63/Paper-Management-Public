@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}{{ t('library.title') }} — Paper Management{% endblock %}
+
+{% block layout %}
+<!-- Left column: Initial Rail -->
+{% include "partials/initial_rail.html" %}
+
+<!-- Center column: Toolbar + Paper List -->
+<div class="main-content">
+  <!-- Top toolbar with search -->
+  <div class="top-toolbar">
+    <input
+      class="search-input"
+      type="search"
+      name="q"
+      placeholder="{{ t('library.search_placeholder') }}"
+      value="{{ search_query }}"
+      hx-get="/papers"
+      hx-trigger="keyup changed delay:300ms, search"
+      hx-target="#paper-list"
+      hx-swap="innerHTML"
+      hx-include="this"
+      aria-label="{{ t('library.search_aria') }}"
+    >
+    <button
+      class="btn btn--secondary"
+      id="obsidian-search-btn"
+      type="button"
+      title="{{ t('library.obsidian_search_title') }}"
+      aria-label="{{ t('library.obsidian_search_aria') }}">
+      {{ t('library.obsidian_search_button') }}
+    </button>
+    <button
+      class="btn btn--ghost"
+      id="rescan-btn"
+      type="button"
+      title="{{ t('library.rescan_title') }}"
+      aria-label="{{ t('library.rescan_title') }}"
+      hx-post="/library/rescan"
+      hx-target="#paper-list"
+      hx-swap="innerHTML">
+      &#8635;
+    </button>
+    <a href="/import" class="btn btn--ghost">{{ t('nav.import_status') }}</a>
+    <a href="/collections" class="btn btn--ghost">{{ t('nav.collections') }}</a>
+    <a href="/settings" class="btn btn--ghost">{{ t('nav.settings') }}</a>
+  </div>
+
+  <!-- Paper list area -->
+  <div class="paper-list" id="paper-list">
+    {% include "partials/paper_list.html" %}
+  </div>
+</div>
+
+<!-- Right column: Inspector -->
+<div class="inspector" id="inspector-panel">
+  {% include "partials/inspector.html" %}
+</div>
+{% endblock %}

@@ -1,0 +1,92 @@
+/* Design tokens for "Reading Room" aesthetic.
+ *
+ * All colors, typography, and spacing are defined as CSS custom properties.
+ * See UI設計書.md section 2 for the canonical specification.
+ */
+
+:root {
+  /* ============================================================
+   * Colors
+   * ============================================================ */
+
+  /* Primary: Botanical Green */
+  --color-primary: #2F4A3B;
+  /* Secondary: Sage Green */
+  --color-secondary: #4A6B58;
+  /* Accent: Ochre (badges, warnings) */
+  --color-accent: #B6792B;
+  /* Background: Warm Paper */
+  --color-bg: #F7F4ED;
+  /* Surface: Off-white (panels, rail) */
+  --color-surface: #FCFAF4;
+  /* Text primary: Ink */
+  --color-text: #211E1A;
+  /* Text secondary: Warm Gray */
+  --color-text-secondary: #6B6459;
+  /* Hairline rule */
+  --color-hairline: #E5E0D4;
+  /* Error: Oxblood */
+  --color-error: #8C2F22;
+
+  /* ============================================================
+   * Typography — font families
+   * ============================================================ */
+  --font-heading: "Shippori Mincho", serif;
+  --font-body: "BIZ UDPGothic", "IBM Plex Sans", sans-serif;
+  --font-mono: "IBM Plex Mono", monospace;
+  --font-label: "BIZ UDPGothic", sans-serif;
+
+  /* ============================================================
+   * Typography — sizes
+   * ============================================================ */
+  --text-h1: 1.75rem;
+  --text-h2: 1.3rem;
+  --text-h3: 1.05rem;
+  --text-paper-title: 1rem;
+  --text-body: 0.95rem;
+  --text-meta: 0.8rem;
+  --text-label: 0.78rem;
+
+  /* ============================================================
+   * Typography — weights
+   * ============================================================ */
+  --weight-h1: 600;
+  --weight-h2: 600;
+  --weight-h3: 700;
+  --weight-paper-title: 500;
+  --weight-body: 400;
+  --weight-meta: 400;
+  --weight-label: 500;
+
+  /* ============================================================
+   * Spacing (8px base, 4px for fine tuning)
+   * ============================================================ */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+
+  /* ============================================================
+   * Layout — 3 column
+   * ============================================================ */
+  --rail-width: 56px;
+  --inspector-width: 380px;
+  --container-max: 1600px;
+  --container-min: 1024px;
+
+  /* ============================================================
+   * Transitions
+   * ============================================================ */
+  --transition-fast: 150ms ease;
+  --transition-normal: 200ms ease;
+
+  /* ============================================================
+   * Focus ring
+   * ============================================================ */
+  --focus-ring: 0 0 0 2px var(--color-primary);
+}

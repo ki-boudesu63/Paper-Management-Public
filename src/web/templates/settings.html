@@ -1,0 +1,231 @@
+{% extends "base.html" %}
+
+{% block title %}{{ t('settings.title') }} — Paper Management{% endblock %}
+
+{% block layout %}
+<div class="main-content" style="padding: var(--space-6); overflow-y: auto;">
+  <div style="max-width: 960px; margin: 0 auto;">
+    <h1 class="heading-h1" style="margin-bottom: var(--space-4);">{{ t('settings.heading') }}</h1>
+
+    <!-- Navigation -->
+    <div style="margin-bottom: var(--space-6);">
+      <a href="/" class="btn btn--ghost">&larr; {{ t('nav.back_to_library') }}</a>
+      <a href="/import" class="btn btn--ghost">{{ t('nav.import_status') }}</a>
+      <a href="/collections" class="btn btn--ghost">{{ t('nav.collections') }}</a>
+    </div>
+
+    {% if saved %}
+    <div class="toast toast--success" style="margin-bottom: var(--space-4);">
+      {{ t('settings.saved_message') }}
+    </div>
+    {% endif %}
+
+    {% if rescanned %}
+    <div class="toast toast--success" style="margin-bottom: var(--space-4);">
+      {{ t('settings.rescanned_message') }}
+    </div>
+    {% endif %}
+
+    <form action="/settings/save" method="post">
+      <!-- Path settings -->
+      <div style="margin-bottom: var(--space-6);">
+        <h2 class="heading-h2" style="margin-bottom: var(--space-4);">{{ t('settings.path_settings') }}</h2>
+
+        <p class="text-meta" style="margin-bottom: var(--space-4);">
+          {{ t('settings.path_help_prefix') }} <code>vault_template/paper_management</code> {{ t('settings.path_help_suffix') }}
+        </p>
+
+        <div class="setting-field">
+          <label class="text-label" for="library_root">{{ t('settings.library_root_label') }}</label>
+          <p class="text-meta" style="margin: 0 0 var(--space-1);">{{ t('settings.select_folder') }} &rarr; <strong>library</strong></p>
+          <div style="display: flex; gap: var(--space-2); align-items: center;">
+            <input
+              class="search-input"
+              type="text"
+              id="library_root"
+              name="library_root"
+              value="{{ paths.get('library_root', '') }}"
+              placeholder="{{ t('settings.library_root_placeholder') }}"
+              style="flex: 1;"
+            >
+            <button type="button" class="btn btn--ghost folder-pick-btn" data-target="library_root">{{ t('settings.browse') }}</button>
+          </div>
+          {% if path_status.library_root %}
+          <span class="text-meta" style="color: var(--color-primary);">&#10003; {{ t('settings.path_exists') }}</span>
+          {% elif paths.get('library_root', '') %}
+          <span class="text-meta" style="color: var(--color-error);">&#10007; {{ t('settings.path_missing') }}</span>
+          {% endif %}
+        </div>
+
+        <div class="setting-field">
+          <label class="text-label" for="vault_path">{{ t('settings.vault_path_label') }}</label>
+          <p class="text-meta" style="margin: 0 0 var(--space-1);">{{ t('settings.select_folder') }} &rarr; <strong>{{ t('settings.vault_root') }}</strong></p>
+          <div style="display: flex; gap: var(--space-2); align-items: center;">
+            <input
+              class="search-input"
+              type="text"
+              id="vault_path"
+              name="vault_path"
+              value="{{ paths.get('vault_path', '') }}"
+              placeholder="{{ t('settings.vault_path_placeholder') }}"
+              style="flex: 1;"
+            >
+            <button type="button" class="btn btn--ghost folder-pick-btn" data-target="vault_path">{{ t('settings.browse') }}</button>
+          </div>
+          {% if path_status.vault_path %}
+          <span class="text-meta" style="color: var(--color-primary);">&#10003; {{ t('settings.path_exists') }}</span>
+          {% elif paths.get('vault_path', '') %}
+          <span class="text-meta" style="color: var(--color-error);">&#10007; {{ t('settings.path_missing') }}</span>
+          {% endif %}
+        </div>
+
+        <div class="setting-field">
+          <label class="text-label" for="style_folder">{{ t('settings.style_folder_label') }}</label>
+          <p class="text-meta" style="margin: 0 0 var(--space-1);">{{ t('settings.select_folder') }} &rarr; <strong>styles</strong></p>
+          <div style="display: flex; gap: var(--space-2); align-items: center;">
+            <input
+              class="search-input"
+              type="text"
+              id="style_folder"
+              name="style_folder"
+              value="{{ paths.get('style_folder', '') }}"
+              placeholder="{{ t('settings.style_folder_placeholder') }}"
+              style="flex: 1;"
+            >
+            <button type="button" class="btn btn--ghost folder-pick-btn" data-target="style_folder">{{ t('settings.browse') }}</button>
+          </div>
+          {% if path_status.style_folder %}
+          <span class="text-meta" style="color: var(--color-primary);">&#10003; {{ t('settings.path_exists') }}</span>
+          {% elif paths.get('style_folder', '') %}
+          <span class="text-meta" style="color: var(--color-error);">&#10007; {{ t('settings.path_missing') }}</span>
+          {% endif %}
+        </div>
+
+        <div class="setting-field">
+          <label class="text-label" for="watch_folder">{{ t('settings.watch_folder_label') }}</label>
+          <p class="text-meta" style="margin: 0 0 var(--space-1);">{{ t('settings.select_folder') }} &rarr; <strong>inbox</strong>{{ t('settings.watch_folder_hint') }}</p>
+          <div style="display: flex; gap: var(--space-2); align-items: center;">
+            <input
+              class="search-input"
+              type="text"
+              id="watch_folder"
+              name="watch_folder"
+              value="{{ paths.get('watch_folder', '') }}"
+              placeholder="{{ t('settings.watch_folder_placeholder') }}"
+              style="flex: 1;"
+            >
+            <button type="button" class="btn btn--ghost folder-pick-btn" data-target="watch_folder">{{ t('settings.browse') }}</button>
+          </div>
+          {% if path_status.watch_folder %}
+          <span class="text-meta" style="color: var(--color-primary);">&#10003; {{ t('settings.path_exists') }}</span>
+          {% elif paths.get('watch_folder', '') %}
+          <span class="text-meta" style="color: var(--color-error);">&#10007; {{ t('settings.path_missing') }}</span>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Vault name -->
+      <div style="margin-bottom: var(--space-6);">
+        <h2 class="heading-h2" style="margin-bottom: var(--space-4);">{{ t('settings.obsidian_integration') }}</h2>
+
+        <div class="setting-field">
+          <label class="text-label" for="vault_name">{{ t('settings.vault_name_label') }}</label>
+          <input
+            class="search-input"
+            type="text"
+            id="vault_name"
+            name="vault_name"
+            value="{{ vault_name }}"
+            placeholder="{{ t('settings.vault_name_placeholder') }}"
+            style="width: 100%;"
+          >
+        </div>
+      </div>
+
+      <!-- Contact email -->
+      <div style="margin-bottom: var(--space-6);">
+        <h2 class="heading-h2" style="margin-bottom: var(--space-4);">{{ t('settings.crossref_settings') }}</h2>
+
+        <div class="setting-field">
+          <label class="text-label" for="contact_email">{{ t('settings.contact_email_label') }}</label>
+          <input
+            class="search-input"
+            type="email"
+            id="contact_email"
+            name="contact_email"
+            value="{{ contact_email }}"
+            placeholder="{{ t('settings.contact_email_placeholder') }}"
+            style="width: 100%;"
+          >
+        </div>
+      </div>
+
+      <!-- Language -->
+      <div style="margin-bottom: var(--space-6);">
+        <h2 class="heading-h2" style="margin-bottom: var(--space-4);">{{ t('settings.language_settings') }}</h2>
+
+        <div class="setting-field">
+          <label class="text-label" for="language">{{ t('settings.language_label') }}</label>
+          <select class="search-input" id="language" name="language" style="width: 100%;">
+            <option value="ja" {% if current_language() == "ja" %}selected{% endif %}>日本語</option>
+            <option value="en" {% if current_language() == "en" %}selected{% endif %}>English</option>
+            <option value="zh" {% if current_language() == "zh" %}selected{% endif %}>简体中文</option>
+          </select>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn--primary">{{ t('settings.save_button') }}</button>
+    </form>
+
+    <!-- Library rescan -->
+    <div style="margin-top: var(--space-6);">
+      <h2 class="heading-h2" style="margin-bottom: var(--space-4);">{{ t('settings.library_management') }}</h2>
+      <p class="text-meta" style="margin-bottom: var(--space-3);">
+        {{ t('settings.rescan_help') }}
+      </p>
+      <form action="/settings/rescan" method="post">
+        <button type="submit" class="btn btn--secondary">{{ t('settings.rescan_button') }}</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+/**
+ * Folder picker integration for settings page.
+ * Calls POST /settings/pick-folder to open a native dialog,
+ * then fills the corresponding input field with the selected path.
+ */
+document.addEventListener("DOMContentLoaded", function () {
+  var pickButtons = document.querySelectorAll(".folder-pick-btn");
+
+  pickButtons.forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var targetId = btn.getAttribute("data-target");
+      var inputEl = document.getElementById(targetId);
+      if (!inputEl) return;
+
+      btn.disabled = true;
+      btn.textContent = "{{ t('settings.folder_selecting') }}";
+
+      fetch("/settings/pick-folder", { method: "POST" })
+        .then(function (resp) { return resp.json(); })
+        .then(function (data) {
+          if (data.path) {
+            inputEl.value = data.path;
+          }
+        })
+        .catch(function (err) {
+          console.error("Folder picker request failed:", err);
+        })
+        .finally(function () {
+          btn.disabled = false;
+          btn.textContent = "{{ t('settings.browse') }}";
+        });
+    });
+  });
+});
+</script>
+{% endblock %}
