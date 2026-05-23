@@ -5,6 +5,7 @@
 ローカル完結型の論文管理・執筆支援ツール。
 EndNote / Mendeley / Paperpile に相当する機能を、データベースを持たない
 **ファイルベース構成（PDF + Markdown ペア）** で実現します。
+<img width="1672" height="941" alt="論文管理アプリ" src="https://github.com/user-attachments/assets/e040cbef-3409-4823-ac07-4cc401f32559" />
 
 ## 主な機能
 
