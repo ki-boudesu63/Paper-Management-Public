@@ -5,6 +5,7 @@
 A fully local paper management and writing support tool.
 It provides functionality equivalent to EndNote / Mendeley / Paperpile using a
 **file-based architecture (PDF + Markdown pairs)** with no database.
+<img width="1672" height="941" alt="生成画像1" src="https://github.com/user-attachments/assets/36016ff9-4e78-4a95-95e4-e0f7ceb69122" />
 
 ## Key Features
 
